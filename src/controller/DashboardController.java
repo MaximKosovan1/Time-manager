@@ -7,15 +7,29 @@ import java.util.Scanner;
 public class DashboardController {
     private Dashboard _dashboard;
     private UserController _userController;
+
+    public MenuState MenuState;
+
     public DashboardController(){
         _dashboard = new Dashboard();
         _userController = new UserController();
+        //MenuState = new MainMenu(this);
         Start();
+    }
+    public void Display()
+    {
+
+    }
+    public void SelectMenu(int option)
+    {
+
     }
     public void Start() {
         _dashboard.OutputEnterAccount();
+
         var scanner = new Scanner(System.in);
         boolean isEntered = false;
+
         while(isEntered != true) {
             switch (scanner.nextLine()) {
                 case "1":
