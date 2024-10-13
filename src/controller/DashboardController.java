@@ -1,49 +1,36 @@
 package controller;
 
+import controller.menuStates.InitialMenu;
+import controller.menuStates.MenuState;
 import view.Dashboard;
 
 import java.util.Scanner;
 
 public class DashboardController {
-    private Dashboard _dashboard;
-    private UserController _userController;
+    static public DashboardController Instance;
 
-    public MenuState MenuState;
+    public MenuState CurrentMenuState;
 
     public DashboardController(){
-        _dashboard = new Dashboard();
-        _userController = new UserController();
-        //MenuState = new MainMenu(this);
-        Start();
+        if(Instance == null) Instance = this;
+
+        SetState(new InitialMenu());
     }
-    public void Display()
-    {
 
+    public void SetState(MenuState state){
+        CurrentMenuState = state;
+        Display();
+        Interaction();
     }
-    public void SelectMenu(int option)
-    {
 
+    public void Interaction() {
+        CurrentMenuState.Interaction();
     }
-    public void Start() {
-        _dashboard.OutputEnterAccount();
 
-        var scanner = new Scanner(System.in);
-        boolean isEntered = false;
-
-        while(isEntered != true) {
-            switch (scanner.nextLine()) {
-                case "1":
-                    _dashboard.OutputRegisterMenu();
-                    isEntered = _userController.Register(scanner.nextLine(), scanner.nextLine());
-                    break;
-                case "2":
-                    _dashboard.OutputLoginMenu();
-                    isEntered = _userController.Login(scanner.nextLine(), scanner.nextLine());
-                    break;
-                default:
-                    _dashboard.OutputError();
-                    isEntered = false;
-            }
-        }
+    public void Display() {
+        CurrentMenuState.Display();
+    }
+    public void SelectMenu (int option) {
+        CurrentMenuState.SelectMenu(option);
     }
 }
