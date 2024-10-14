@@ -7,10 +7,13 @@ public class Task {
     public TaskState state;
     public Date StartDay;
     public Date EndDay;
+
+    public Task(String name, String description, TaskState state, Date startDay, Date endDay) {
+        this.name = name;
+        this.description = description;
+        this.state = state;
+        StartDay = startDay;
+        EndDay = endDay;
+    }
 }
 
-enum TaskState {
-    ToDo,
-    InProgress,
-    Done
-}

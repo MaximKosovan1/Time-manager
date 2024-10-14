@@ -6,6 +6,10 @@ import model.User;
 import java.util.List;
 
 public class Dashboard {
+    public void OutputCustomMessage(String msg)
+    {
+        System.out.println(msg);
+    }
     public void OutputInitialMenu() {
         System.out.println("==== Вхід в акаунт ====");
         System.out.println("1. Зареєструвати акаунт");
