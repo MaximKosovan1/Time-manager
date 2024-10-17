@@ -8,6 +8,10 @@ public class Task {
     public Date StartDay;
     public Date EndDay;
 
+    public Task()
+    {
+
+    }
     public Task(String name, String description, TaskState state, Date startDay, Date endDay) {
         this.name = name;
         this.description = description;

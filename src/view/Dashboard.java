@@ -26,10 +26,7 @@ public class Dashboard {
     public void OutputMainMenu() {
         System.out.println("==== Головне меню ====");
         System.out.println("1. Меню завдань");
-        System.out.println("2. Меню завдань в групі");
-        System.out.println("3. Приєднатись до групи");
-        System.out.println("4. Створити групу");
-        System.out.println("5. Вийти з акаунта");
+        System.out.println("2. Вийти з акаунта");
     }
     public void OutputUserTaskMenu(List<Task> tasks) {
         System.out.println("==== Меню завдань ====");
@@ -38,23 +35,21 @@ public class Dashboard {
         System.out.println("* Кінець списку активних завдань *");
         System.out.println("1. Створити нове завдання");
         System.out.println("2. Змінити статус завдання");
-        System.out.println("3. Видалити завдання групу");
-        System.out.println("4. Пошук інших завдань");
-        System.out.println("5. Повернутися до головного меню");
+        System.out.println("3. Видалити завдання");
+        System.out.println("4. Повернутися до головного меню");
     }
     public void OutputTaskList(List<Task> tasks) {
+        if(tasks == null) return;
         for (Task task : tasks) {
             OutputTask(task);
         }
     }
     public void OutputTask(Task task) {
         System.out.println();
-        System.out.println(task.StartDay + " - " + task.EndDay);
         System.out.println("| " + task.name + " |");
-        System.out.println("Опис ->");
-        System.out.println(task.description);
-        System.out.println("<-");
-        System.out.println("Статус" + task.state);
+        System.out.println(task.StartDay + " - " + task.EndDay);
+        System.out.println("Опис - " + task.description);
+        System.out.println("Статус: " + task.state);
         System.out.println();
     }
     public void OutputError() {

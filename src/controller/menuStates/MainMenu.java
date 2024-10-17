@@ -28,12 +28,15 @@ public class MainMenu implements MenuState{
     public void SelectMenu(int option) {
         switch(option)
         {
-            case 5:
+            case 1:
+                DashboardController.Instance.SetState(new UserTaskMenu());
+                break;
+            case 2:
                 SessionController.SetUser(null);
                 DashboardController.Instance.SetState(new InitialMenu());
                 break;
             default:
-                DashboardController.Instance.SetState(new ErrorMenu());
+                DashboardController.Instance.SetState(new MainMenu());
         }
     }
 }

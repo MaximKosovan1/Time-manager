@@ -1,6 +1,7 @@
 package controller.menuStates;
 
 import controller.DashboardController;
+import controller.SessionController;
 import view.Dashboard;
 
 import java.util.Scanner;
@@ -14,6 +15,7 @@ public class ErrorMenu implements MenuState{
 
     @Override
     public void Interaction() {
+        SessionController.SetUser(null);
         var scanner = new Scanner(System.in);
         SelectMenu(scanner.nextInt());
     }
