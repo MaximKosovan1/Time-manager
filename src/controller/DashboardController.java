@@ -13,8 +13,6 @@ public class DashboardController {
 
     public DashboardController(){
         if(Instance == null) Instance = this;
-
-        SetState(new InitialMenu());
     }
 
     public void SetState(MenuState state){

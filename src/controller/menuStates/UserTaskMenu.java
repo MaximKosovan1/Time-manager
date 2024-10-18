@@ -24,7 +24,8 @@ public class UserTaskMenu implements MenuState {
 
     @Override
     public void Display() {
-        _dashboard.OutputUserTaskMenu(SessionController.GetUser().tasks);
+        var user = SessionController.GetUser();
+        _dashboard.OutputUserTaskMenu(user.tasks, user.linkedTasks);
     }
 
     @Override
@@ -34,15 +35,19 @@ public class UserTaskMenu implements MenuState {
                 _taskController.CreateNewTask();
                 DashboardController.Instance.SetState(this);
                 break;
-            case 2:
-                _taskController.ChangeTaskStatusByName();
+                case 2:
+                _taskController.CreateNewLinkedTask();
                 DashboardController.Instance.SetState(this);
                 break;
             case 3:
-                _taskController.DeleteTaskByName();
+                _taskController.ChangeTaskStatusByName();
                 DashboardController.Instance.SetState(this);
                 break;
             case 4:
+                _taskController.DeleteTaskByName();
+                DashboardController.Instance.SetState(this);
+                break;
+            case 5:
                 DashboardController.Instance.SetState(new MainMenu());
                 break;
             default:

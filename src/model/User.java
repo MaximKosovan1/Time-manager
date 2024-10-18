@@ -12,17 +12,20 @@ public class User {
     public String username;
     public String password;
     public List<Task> tasks;
+    public List<LinkedTask> linkedTasks;
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public User() {
         tasks = new ArrayList<>();
+        linkedTasks = new ArrayList<>();
     }
 
     public User(String username, String password) {
         this.username = username;
         this.password = password;
         tasks = new ArrayList<>();
+        linkedTasks = new ArrayList<>();
     }
 
     public void addTask(Task task) throws IOException {
@@ -30,10 +33,21 @@ public class User {
         saveUsersToFile();
     }
 
+    public void addLinkedTask(LinkedTask linkedTask) throws IOException {
+        this.linkedTasks.add(linkedTask);
+        saveUsersToFile();
+    }
+
     public void removeTask(Task task) throws IOException {
         this.tasks.remove(task);
         saveUsersToFile();
     }
+
+    public void removeLinkedTask(LinkedTask linkedTask) throws IOException {
+        this.linkedTasks.remove(linkedTask);
+        saveUsersToFile();
+    }
+
     public boolean removeTaskByName(String taskName) throws IOException {
         for (Task task : tasks) {
             if (task.name.equals(taskName)) {
@@ -46,17 +60,17 @@ public class User {
     }
 
     public void UpdateUserData() throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        List<User> users = objectMapper.readValue(new File("users.json"), new TypeReference<List<User>>() {});
+        List<User> users = loadUsersFromFile();
 
         for (User user : users) {
             if (user.username.equals(this.username)) {
                 user.tasks = this.tasks;
+                user.linkedTasks = this.linkedTasks;
                 break;
             }
         }
 
-        objectMapper.writeValue(new File("users.json"), users);
+        saveUsersToFile(users);
     }
 
     private void saveUsersToFile() throws IOException {
@@ -65,9 +79,20 @@ public class User {
         for (User user : users) {
             if (user.username.equals(this.username)) {
                 user.tasks = this.tasks;
+                user.linkedTasks = this.linkedTasks;
             }
         }
-        objectMapper.writeValue(new File("users.json"), users);
+
+        saveUsersToFile(users);
+    }
+
+    private List<User> loadUsersFromFile() {
+        try {
+            return objectMapper.readValue(new File("users.json"), new TypeReference<List<User>>() {});
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
     }
 
     public Task findTaskByName(String taskName) {
@@ -79,12 +104,16 @@ public class User {
         return null;
     }
 
-    private List<User> loadUsersFromFile() {
-        try {
-            return objectMapper.readValue(new File("users.json"), new TypeReference<List<User>>() {});
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new ArrayList<>();
+    public LinkedTask findLinkedTaskByName(String taskName) {
+        for (LinkedTask linkedTask : linkedTasks) {
+            if (linkedTask.name.equals(taskName)) {
+                return linkedTask;
+            }
         }
+        return null;
+    }
+
+    private void saveUsersToFile(List<User> users) throws IOException {
+        objectMapper.writeValue(new File("users.json"), users);
     }
 }

@@ -1,6 +1,7 @@
 package controller;
 
 import com.fasterxml.jackson.databind.util.Converter;
+import model.LinkedTask;
 import model.Task;
 import model.TaskState;
 import view.Dashboard;
@@ -45,6 +46,59 @@ public class TaskController {
 
         CreateNewTask(name, description, state, endDay, startDay);
     }
+    public void CreateNewLinkedTask() {
+        var scanner = new Scanner(System.in);
+
+        // Пошук попереднього завдання
+        _dashboard.OutputCustomMessage("Введіть назву попереднього завдання, з яким хочете зв'язати нове");
+        String previousTaskName = scanner.nextLine();
+
+        try {
+            Task previousTask = SessionController.GetUser().findTaskByName(previousTaskName);
+
+            if (previousTask != null) {
+                // Запитання деталей нового завдання
+                String name;
+                String description;
+                Date startDay;
+                Date endDay;
+                TaskState state;
+
+                _dashboard.OutputCustomMessage("Введіть назву нового завдання");
+                name = scanner.nextLine();
+                _dashboard.OutputCustomMessage("Введіть опис нового завдання");
+                description = scanner.nextLine();
+
+                _dashboard.OutputCustomMessage("Введіть початкову дату завдання (yyyy-MM-dd)");
+                startDay = ReadDate();
+                _dashboard.OutputCustomMessage("Введіть кінцеву дату завдання (yyyy-MM-dd)");
+                endDay = ReadDate();
+
+                _dashboard.OutputCustomMessage("Введіть статус завдання");
+                _dashboard.OutputCustomMessage("1 - " + TaskState.ToDo);
+                _dashboard.OutputCustomMessage("2 - " + TaskState.InProgress);
+                _dashboard.OutputCustomMessage("3 - " + TaskState.Done);
+                state = ReadTaskState();
+
+                LinkedTask linkedTask = new LinkedTask();
+                linkedTask.name = name;
+                linkedTask.description = description;
+                linkedTask.state = state;
+                linkedTask.StartDay = startDay;
+                linkedTask.EndDay = endDay;
+                linkedTask.previousTask = previousTask;
+
+                SessionController.GetUser().addLinkedTask(linkedTask);
+                _dashboard.OutputCustomMessage("Зв'язане завдання \"" + name + "\" успішно створено і прив'язано до \"" + previousTaskName + "\".");
+            } else {
+                _dashboard.OutputCustomMessage("Завдання з такою назвою не знайдено.");
+            }
+        } catch (IOException e) {
+            _dashboard.OutputCustomMessage("Виникла помилка під час створення зв'язаного завдання: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
     public void ChangeTaskStatusByName() {
         var scanner = new Scanner(System.in);
 
@@ -61,9 +115,9 @@ public class TaskController {
                 _dashboard.OutputCustomMessage("3 - " + TaskState.Done);
 
                 TaskState newState = ReadTaskState();
-                task.state = newState;  // Оновлюємо статус завдання
+                task.state = newState;
 
-                SessionController.GetUser().UpdateUserData();  // Оновлюємо дані користувача
+                SessionController.GetUser().UpdateUserData();
                 _dashboard.OutputCustomMessage("Статус завдання \"" + taskName + "\" змінено на " + newState);
             } else {
                 _dashboard.OutputCustomMessage("Завдання з такою назвою не знайдено.");

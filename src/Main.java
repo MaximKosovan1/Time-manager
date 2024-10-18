@@ -1,9 +1,11 @@
 import controller.DashboardController;
 import controller.SessionController;
+import controller.menuStates.InitialMenu;
 
 public class Main {
     public static void main(String[] args) {
-        var Session = new SessionController();
-        var Dashboard = new DashboardController();
+        var session = new SessionController();
+        var dashboard = new DashboardController();
+        dashboard.SetState(new InitialMenu());
     }
 }
