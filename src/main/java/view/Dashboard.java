@@ -71,17 +71,18 @@ public class Dashboard {
 
     public void OutputLinkedTask(LinkedTask linkedTask) {
         System.out.println();
-        System.out.println("| " + linkedTask.name + " (зв'язане з: " + linkedTask.previousTask.name + ") |");
-        System.out.println(linkedTask.StartDay + " - " + linkedTask.EndDay);
+        System.out.println("| " + linkedTask.name + " (зв'язане з: " + linkedTask.previousTask.name + ") |"); // Access name directly from the Task object
+        System.out.println(linkedTask.startDay + " - " + linkedTask.endDay);
         System.out.println("Опис - " + linkedTask.description);
         System.out.println("Статус: " + linkedTask.state);
         System.out.println();
     }
 
+
     public void OutputTask(Task task) {
         System.out.println();
         System.out.println("| " + task.name + " |");
-        System.out.println(task.StartDay + " - " + task.EndDay);
+        System.out.println(task.startDay + " - " + task.endDay);
         System.out.println("Опис - " + task.description);
         System.out.println("Статус: " + task.state);
         System.out.println();

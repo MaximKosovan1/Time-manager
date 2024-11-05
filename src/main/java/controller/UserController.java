@@ -2,34 +2,35 @@ package controller;
 
 import model.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException; // Import the NoResultException
 import java.util.Scanner;
 
 public class UserController {
-
     public boolean Register() {
         Scanner scanner = new Scanner(System.in);
         String username = scanner.nextLine();
         String password = scanner.nextLine();
 
-        String sql = "INSERT INTO users (username, password) VALUES (?, ?)";
-        try (Connection conn = DatabaseUtil.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
-            stmt.setString(1, username);
-            stmt.setString(2, password);
-            stmt.executeUpdate();
+        User user = new User(username, password);
+        EntityTransaction transaction = null;
 
-            ResultSet generatedKeys = stmt.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                int userId = generatedKeys.getInt(1);
-                SessionController.SetUser(new User(username, password, userId));
-                return true;
+        EntityManager entityManager = HibernateUtil.getEntityManagerFactory().createEntityManager();
+        try {
+            transaction = entityManager.getTransaction();
+            transaction.begin();
+            entityManager.persist(user);
+            transaction.commit();
+            SessionController.SetUser(user);
+            return true;
+        } catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+           // e.printStackTrace(); // You might want to log this to a file instead
+        } finally {
+            entityManager.close();
         }
         return false;
     }
@@ -39,22 +40,24 @@ public class UserController {
         String typedUsername = scanner.nextLine();
         String typedPassword = scanner.nextLine();
 
-        String sql = "SELECT id, username, password FROM users WHERE username = ? AND password = ?";
-        try (Connection conn = DatabaseUtil.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, typedUsername);
-            stmt.setString(2, typedPassword);
-            ResultSet rs = stmt.executeQuery();
+        EntityManager entityManager = HibernateUtil.getEntityManagerFactory().createEntityManager();
+        try {
+            User user = entityManager.createQuery("FROM User WHERE username = :username AND password = :password", User.class)
+                    .setParameter("username", typedUsername)
+                    .setParameter("password", typedPassword)
+                    .getSingleResult();
 
-            if (rs.next()) {
-                int userId = rs.getInt("id"); // Get the user's ID from the ResultSet
-                SessionController.SetUser(new User(typedUsername, typedPassword, userId));
+            if (user != null) {
+                SessionController.SetUser(user);
                 return true;
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (NoResultException e) {
+            // Do nothing, suppress the error message
+        } catch (Exception e) {
+           // e.printStackTrace(); // Consider logging this instead
+        } finally {
+            entityManager.close();
         }
         return false;
     }
-
 }
