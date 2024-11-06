@@ -1,5 +1,6 @@
 package controller.menuStates;
 
+import controller.BeanManager;
 import controller.DashboardController;
 import controller.SessionController;
 import controller.TaskController;
@@ -14,8 +15,8 @@ public class UserTaskMenu implements MenuState {
     private TaskController _taskController;
 
     public UserTaskMenu() {
-        _dashboard = new Dashboard();
-        _taskController = new TaskController();
+        _taskController = BeanManager.getContext().getBean(TaskController.class);
+        _dashboard = BeanManager.getContext().getBean(Dashboard.class);
     }
 
     @Override

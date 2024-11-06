@@ -1,5 +1,6 @@
 package controller.menuStates;
 
+import controller.BeanManager;
 import controller.DashboardController;
 import controller.UserController;
 import view.Dashboard;
@@ -9,8 +10,8 @@ public class LoginMenu implements MenuState{
     private UserController _userController;
 
     public LoginMenu(){
-        _dashboard = new Dashboard();
-        _userController = new UserController();
+        _dashboard = BeanManager.getContext().getBean(Dashboard.class);
+        _userController = BeanManager.getContext().getBean(UserController.class);
     }
     @Override
     public void Interaction() {

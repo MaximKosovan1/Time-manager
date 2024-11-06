@@ -1,5 +1,6 @@
 package controller.menuStates;
 
+import controller.BeanManager;
 import controller.DashboardController;
 import controller.SessionController;
 import view.Dashboard;
@@ -10,7 +11,7 @@ public class MainMenu implements MenuState{
     private Dashboard _dashboard;
 
     public MainMenu(){
-        _dashboard = new Dashboard();
+        _dashboard = BeanManager.getContext().getBean(Dashboard.class);
     }
 
     @Override

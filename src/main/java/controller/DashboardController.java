@@ -1,12 +1,15 @@
 package controller;
 
 import controller.menuStates.MenuState;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class DashboardController {
     static public DashboardController Instance;
 
     public MenuState CurrentMenuState;
-
+    @Autowired
     public DashboardController(){
         if(Instance == null) Instance = this;
     }

@@ -6,22 +6,27 @@ import model.TaskState;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import view.Dashboard;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 
+@Controller
 public class TaskController {
     private Dashboard _dashboard;
-
+    @Autowired
     public TaskController() {
-        _dashboard = new Dashboard();
+        //_dashboard = BeanManager.getContext().getBean(Dashboard.class);
     }
 
     public void CreateNewTask() {
         Scanner scanner = new Scanner(System.in);
-
+        _dashboard = BeanManager.getContext().getBean(Dashboard.class);
         _dashboard.OutputCustomMessage("Введіть назву завдання");
         String name = scanner.nextLine();
         _dashboard.OutputCustomMessage("Введіть опис завдання");
@@ -43,6 +48,7 @@ public class TaskController {
 
     public void CreateNewLinkedTask() {
         Scanner scanner = new Scanner(System.in);
+        _dashboard = BeanManager.getContext().getBean(Dashboard.class);
         _dashboard.OutputCustomMessage("Введіть назву попереднього завдання, з яким хочете зв'язати нове");
         String previousTaskName = scanner.nextLine();
 
@@ -119,6 +125,8 @@ public class TaskController {
 
     private Date ReadDate() {
         Scanner scanner = new Scanner(System.in);
+        _dashboard = BeanManager.getContext().getBean(Dashboard.class);
+
         while (true) {
             _dashboard.OutputCustomMessage("Введіть дату");
             String input = scanner.nextLine();
@@ -132,6 +140,8 @@ public class TaskController {
 
     private TaskState ReadTaskState() {
         Scanner scanner = new Scanner(System.in);
+        _dashboard = BeanManager.getContext().getBean(Dashboard.class);
+
         while (true) {
             int input = scanner.nextInt();
             TaskState state = TaskState.FromValue(input);
@@ -145,6 +155,8 @@ public class TaskController {
 
     public void ChangeTaskStatusByName() {
         Scanner scanner = new Scanner(System.in);
+        _dashboard = BeanManager.getContext().getBean(Dashboard.class);
+
         System.out.print("Enter the name of the task or linked task you want to update: ");
         String taskName = scanner.nextLine();
 
@@ -205,6 +217,8 @@ public class TaskController {
 
     public void DeleteTaskByName() {
         Scanner scanner = new Scanner(System.in);
+        _dashboard = BeanManager.getContext().getBean(Dashboard.class);
+
         System.out.print("Enter the name of the task or linked task you want to delete: ");
         String taskName = scanner.nextLine();
 

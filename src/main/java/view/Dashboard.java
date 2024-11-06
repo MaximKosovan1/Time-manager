@@ -3,10 +3,12 @@ package view;
 import controller.SessionController;
 import model.Task;
 import model.LinkedTask;
+import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
 
+@Service
 public class Dashboard {
 
     public void OutputCustomMessage(String msg) {

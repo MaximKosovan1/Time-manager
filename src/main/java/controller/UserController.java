@@ -1,12 +1,14 @@
 package controller;
 
 import model.User;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException; // Import the NoResultException
 import java.util.Scanner;
 
+@Service
 public class UserController {
     public boolean Register() {
         Scanner scanner = new Scanner(System.in);
